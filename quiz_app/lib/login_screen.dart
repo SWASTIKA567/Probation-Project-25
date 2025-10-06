@@ -11,26 +11,57 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  bool loading = false;
+  final TextEditingController _emailC = TextEditingController();
+  final TextEditingController _passC = TextEditingController();
+  bool _loading = false;
+  bool obscurePassword = true;
 
-  Future<void> login() async {
-    setState(() => loading = true);
+  Future<void> _login() async {
+    final email = _emailC.text.trim();
+    final pass = _passC.text.trim();
+
+    if (email.isEmpty || pass.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Email and password cannot be empty")),
+      );
+      return;
+    }
+
+    setState(() => _loading = true);
+
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
+        email: email,
+        password: pass,
       );
-      ScaffoldMessenger.of(
+
+      // Login successful → Home screen
+      Navigator.pushReplacement(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Login Successful")));
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
     } on FirebaseAuthException catch (e) {
+      String msg = "Login failed ⚠";
+      if (e.code == 'user-not-found') {
+        msg = "User not found 😕";
+      } else if (e.code == 'wrong-password') {
+        msg = "wrong password 🔑";
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+    } catch (e) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(e.message ?? "Login failed")));
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
     }
-    setState(() => loading = false);
+
+    setState(() => _loading = false);
+  }
+
+  @override
+  void dispose() {
+    _emailC.dispose();
+    _passC.dispose();
+    super.dispose();
   }
 
   @override
@@ -88,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: TextField(
-                      controller: emailController,
+                      controller: _emailC,
                       decoration: InputDecoration(
                         hintText: "Username",
                         filled: true,
@@ -122,16 +153,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
 
                     child: TextField(
-                      controller: passwordController,
+                      controller: _passC,
                       obscureText: true,
                       decoration: InputDecoration(
                         hintText: "Password",
                         filled: true,
                         fillColor: const Color.fromARGB(
                           255,
-                          201,
-                          200,
-                          200,
+                          234,
+                          222,
+                          222,
                         ).withOpacity(0.2),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -144,22 +175,34 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: 2,
                           ),
                         ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.white70,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              obscurePassword = !obscurePassword;
+                            });
+                          },
+                        ),
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 40),
                   Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 75, 4, 86),
+                        backgroundColor: const Color.fromARGB(255, 14, 1, 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
                         minimumSize: const Size(200, 50),
                       ),
-                      onPressed: loading ? null : login,
-                      child: loading
+                      onPressed: _loading ? null : _login,
+                      child: _loading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
                               "LOGIN",
