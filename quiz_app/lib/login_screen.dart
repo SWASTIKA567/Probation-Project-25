@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 100),
+                  const SizedBox(height: 60),
                   Container(
                     decoration: BoxDecoration(
                       boxShadow: [
@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 100),
+                  const SizedBox(height: 60),
                   Container(
                     decoration: BoxDecoration(
                       boxShadow: [

@@ -55,57 +55,127 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Pink background circle
-            Positioned(
-              right: -60,
-              bottom: -60,
-              child: Container(
-                height: 250,
-                width: 250,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFE1E8),
-                  shape: BoxShape.circle,
-                ),
-              ),
+            Positioned.fill(
+              child: Image.asset("assets/background2.jpg", fit: BoxFit.cover),
+            ),
+            Positioned.fill(
+              child: Container(color: Colors.black.withOpacity(0.3)),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 60),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
                     "Create Account",
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 215, 201, 201),
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 40),
                   const Text(
                     "Enter your details to register",
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(color: Color.fromARGB(255, 216, 201, 201)),
                   ),
 
-                  const SizedBox(height: 40),
-                  TextField(
-                    controller: usernameController,
-                    decoration: const InputDecoration(
-                      labelText: "Username",
-                      border: UnderlineInputBorder(),
+                  const SizedBox(height: 100),
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.purple.withOpacity(0.6),
+                          blurRadius: 20,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: TextField(
+                      controller: usernameController,
+                      decoration: InputDecoration(
+                        hintText: "Username",
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.2),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide(
+                            color: Colors.purple.withOpacity(0.6),
+                            width: 4,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      labelText: "Email",
-                      border: UnderlineInputBorder(),
+
+                  const SizedBox(height: 60),
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.purple.withOpacity(0.6),
+                          blurRadius: 20,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        hintText: "Email",
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.2),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide(
+                            color: Colors.purple.withOpacity(0.6),
+                            width: 4,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: "Password",
-                      border: UnderlineInputBorder(),
+
+                  const SizedBox(height: 60),
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.purple.withOpacity(0.6),
+                          blurRadius: 20,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: TextField(
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        hintText: "Create Password",
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.2),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide(
+                            color: Colors.purple.withOpacity(0.6),
+                            width: 4,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
 
