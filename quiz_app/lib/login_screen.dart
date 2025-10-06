@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 60),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Positioned(
                     left: 100,
@@ -57,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                       "Welcome To GZONE!",
                       style: TextStyle(
+                        color: Color.fromARGB(255, 215, 201, 201),
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
@@ -68,7 +69,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     top: 20,
                     child: Text(
                       "Enter Your Username & Password",
-                      style: TextStyle(color: Color.fromARGB(255, 48, 17, 17)),
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 216, 201, 201),
+                      ),
                     ),
                   ),
 
@@ -87,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: TextField(
                       controller: emailController,
                       decoration: InputDecoration(
-                        labelText: "Username",
+                        hintText: "Username",
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.2),
                         border: OutlineInputBorder(
@@ -122,9 +125,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
-                        labelText: "Password",
+                        hintText: "Password",
                         filled: true,
-                        fillColor: Colors.white.withOpacity(0.2),
+                        fillColor: const Color.fromARGB(
+                          255,
+                          201,
+                          200,
+                          200,
+                        ).withOpacity(0.2),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide.none,
@@ -133,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide(
                             color: Colors.purple.withOpacity(0.6),
-                            width: 4,
+                            width: 2,
                           ),
                         ),
                       ),
