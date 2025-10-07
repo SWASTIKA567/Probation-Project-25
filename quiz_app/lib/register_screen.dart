@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -10,43 +11,63 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final usernameController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  bool loading = false;
+  final TextEditingController _nameC = TextEditingController();
+  final TextEditingController _emailC = TextEditingController();
+  final TextEditingController _passC = TextEditingController();
 
-  Future<void> register() async {
-    setState(() => loading = true);
-    try {
-      // Step 1: Create user in Firebase Auth
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-            email: emailController.text.trim(),
-            password: passwordController.text.trim(),
-          );
+  bool _loading = false;
 
-      // Step 2: Save extra data in Firestore
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userCredential.user!.uid)
-          .set({
-            'username': usernameController.text.trim(),
-            'email': emailController.text.trim(),
-            'uid': userCredential.user!.uid,
-            'createdAt': Timestamp.now(),
-          });
+  Future<void> _register() async {
+    final name = _nameC.text.trim();
+    final email = _emailC.text.trim();
+    final pass = _passC.text.trim();
 
+    if (name.isEmpty || email.isEmpty || pass.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Account Created Successfully")),
+        const SnackBar(content: Text("Enter all the required fields ✍")),
       );
-
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? "Registration failed")),
-      );
+      return;
     }
-    setState(() => loading = false);
+
+    setState(() => _loading = true);
+
+    try {
+      // Firebase signup
+      UserCredential userCred = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: pass);
+
+      // Saving user details in Firestore
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userCred.user!.uid)
+          .set({"name": name, "email": email, "createdAt": DateTime.now()});
+
+      // Signup after MainScreen
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      String msg = "Signup failed";
+      if (e.code == 'email-already-in-use') {
+        msg = "This email is already registered 😕";
+      } else if (e.code == 'weak-password') {
+        msg = "Please choose a strong password🔑";
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+    }
+
+    setState(() => _loading = false);
+  }
+
+  @override
+  void dispose() {
+    _nameC.dispose();
+    _emailC.dispose();
+    _passC.dispose();
+    super.dispose();
   }
 
   @override
@@ -66,21 +87,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Create Account",
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 215, 201, 201),
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
+                  Transform.translate(
+                    offset: const Offset(0, -30),
+                    child: const Text(
+                      "Create Account",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 215, 201, 201),
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 40),
-                  const Text(
-                    "Enter your details to register",
-                    style: TextStyle(color: Color.fromARGB(255, 216, 201, 201)),
-                  ),
 
-                  const SizedBox(height: 100),
+                  Transform.translate(
+                    offset: const Offset(0, -10),
+                    child: Text(
+                      "Enter your details to register",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 216, 201, 201),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
                   Container(
                     decoration: BoxDecoration(
                       boxShadow: [
@@ -93,7 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: TextField(
-                      controller: usernameController,
+                      controller: _nameC,
                       decoration: InputDecoration(
                         hintText: "Username",
                         filled: true,
@@ -113,7 +141,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 30),
                   Container(
                     decoration: BoxDecoration(
                       boxShadow: [
@@ -126,7 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: TextField(
-                      controller: emailController,
+                      controller: _emailC,
                       decoration: InputDecoration(
                         hintText: "Email",
                         filled: true,
@@ -146,7 +174,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 30),
                   Container(
                     decoration: BoxDecoration(
                       boxShadow: [
@@ -159,7 +187,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: TextField(
-                      controller: passwordController,
+                      controller: _passC,
                       decoration: InputDecoration(
                         hintText: "Create Password",
                         filled: true,
@@ -179,7 +207,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 20),
                   Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -189,8 +217,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         minimumSize: const Size(200, 50),
                       ),
-                      onPressed: loading ? null : register,
-                      child: loading
+                      onPressed: _loading ? null : _register,
+                      child: _loading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
                               "REGISTER",
@@ -200,6 +228,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                     ),
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Already have an account?",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

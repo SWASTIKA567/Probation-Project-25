@@ -43,9 +43,9 @@ class _LoginScreenState extends State<LoginScreen> {
     } on FirebaseAuthException catch (e) {
       String msg = "Login failed ⚠";
       if (e.code == 'user-not-found') {
-        msg = "User not found 😕";
+        msg = "User not found ";
       } else if (e.code == 'wrong-password') {
-        msg = "wrong password 🔑";
+        msg = "Wrong password ";
       }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     } catch (e) {
@@ -82,31 +82,23 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Positioned(
-                    left: 100,
-                    top: 50,
-                    child: Text(
-                      "Welcome To GZONE!",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 215, 201, 201),
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  Positioned(
-                    left: 100,
-                    top: 20,
-                    child: Text(
-                      "Enter Your Username & Password",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 216, 201, 201),
-                      ),
+                  Text(
+                    "Welcome To GZONE!",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 215, 201, 201),
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
 
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 10),
+
+                  Text(
+                    "Enter Your Username & Password",
+                    style: TextStyle(color: Color.fromARGB(255, 216, 201, 201)),
+                  ),
+
+                  const SizedBox(height: 30),
                   Container(
                     decoration: BoxDecoration(
                       boxShadow: [
@@ -139,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 40),
                   Container(
                     decoration: BoxDecoration(
                       boxShadow: [
