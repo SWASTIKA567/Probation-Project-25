@@ -65,7 +65,11 @@ flutter:
   assets:
     - assets/background1.jpg
     - assets/background2.jpg
-    - assets/camera.jpg
+    - assets/bg1.jpg
+    - assets/medium.jpg
+    - assets/bg3.jpg
+    - assets/bg4.jpg
+    - assets/background3.jpg
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

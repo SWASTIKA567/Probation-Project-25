@@ -4,7 +4,9 @@ import 'splash_screen.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
 import 'home_screen.dart';
-import 'quiz.dart';
+import 'easy_quiz.dart';
+import 'medium_quiz.dart';
+import 'hard_quiz.dart';
 import 'leaderboard.dart';
 
 Future<void> main() async {
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomeScreen(),
-        //'/quiz': (context) => const QuizScreen(),
+        //'/quiz': (context) => const (),
         //'/leaderboard': (context) => const LeaderboardScreen(),
       },
     );
