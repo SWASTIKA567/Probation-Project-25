@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'register_screen.dart';
@@ -15,6 +17,23 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passC = TextEditingController();
   bool _loading = false;
   bool obscurePassword = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // Already logged in → Go directly to home screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+    }
+  }
 
   Future<void> _login() async {
     final email = _emailC.text.trim();
@@ -41,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
     } on FirebaseAuthException catch (e) {
+      log("Login error: $e");
       String msg = "Login failed ⚠";
       if (e.code == 'user-not-found') {
         msg = "User not found ";

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,14 +35,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     try {
       // Firebase signup
+      log("Trying to register user: $email");
+      log(
+        "REGISTER PAYLOAD BEFORE AUTH -> name:'$name' email:'$email' pass:'${pass.length} chars'",
+      );
       UserCredential userCred = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: pass);
+      log("User registered: ${userCred.user?.uid}");
+      log("Saving data");
+
+      // Fallback: if email was empty for some reason, use Firebase user's email
+      final savedEmail = email.isNotEmpty
+          ? email
+          : (userCred.user?.email ?? "");
+      final savedName = name; // adjust if you want a fallback name
 
       // Saving user details in Firestore
       await FirebaseFirestore.instance
           .collection("users")
           .doc(userCred.user!.uid)
-          .set({"name": name, "email": email, "createdAt": DateTime.now()});
+          .set({
+            "name": savedName,
+            "email": savedEmail,
+            "createdAt": DateTime.now(),
+          });
+      log("Data saved in Firestore -> name:'$savedName' email:'$savedEmail'");
 
       // Signup after MainScreen
       if (mounted) {
@@ -50,6 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
       }
     } on FirebaseAuthException catch (e) {
+      log("Register error: $e");
       String msg = "Signup failed";
       if (e.code == 'email-already-in-use') {
         msg = "This email is already registered 😕";

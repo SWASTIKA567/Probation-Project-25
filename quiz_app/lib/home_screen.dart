@@ -12,6 +12,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        height: double.infinity,
+        width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -26,69 +28,71 @@ class HomeScreen extends StatelessWidget {
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 10),
-                const Text(
-                  "Ready to test your Gaming IQ ?",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 215, 201, 215),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Ready to test your Gaming IQ ?",
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 215, 201, 215),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  "Select Your Difficulty Level",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color.fromARGB(255, 175, 151, 199),
+                  const SizedBox(height: 4),
+                  const Text(
+                    "Select Your Difficulty Level",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color.fromARGB(255, 175, 151, 199),
+                    ),
                   ),
-                ),
 
-                const SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
-                Column(
-                  children: [
-                    buildRoundedCard(context, "assets/bg1.jpg", "Easy", () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const EasyQuizScreen(difficulty: "LEVEL 1"),
-                        ),
-                      );
-                    }),
-
-                    const SizedBox(height: 20),
-                    buildRoundedCard(
-                      context,
-                      "assets/medium.jpg",
-                      "Medium",
-                      () {
+                  Column(
+                    children: [
+                      buildRoundedCard(context, "assets/bg1.jpg", "Easy", () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                const MediumQuizScreen(difficulty: "LEVEL 2"),
+                                EasyQuizScreen(difficulty: "LEVEL 1"),
                           ),
                         );
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    buildRoundedCard(context, "assets/bg3.jpg", "Hard", () {
-                      Navigator.push(
+                      }),
+
+                      const SizedBox(height: 20),
+                      buildRoundedCard(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              HardQuizScreen(difficulty: "LEVEL 3"),
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-              ],
+                        "assets/medium.jpg",
+                        "Medium",
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const MediumQuizScreen(difficulty: "LEVEL 2"),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      buildRoundedCard(context, "assets/bg3.jpg", "Hard", () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                HardQuizScreen(difficulty: "LEVEL 3"),
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
