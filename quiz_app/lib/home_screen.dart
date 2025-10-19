@@ -1,151 +1,203 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'login_screen.dart';
-import 'easy_quiz.dart';
-import 'medium_quiz.dart';
-import 'hard_quiz.dart';
 
-class HomeScreen extends StatelessWidget {
+import 'quiz_screen.dart';
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  late final AnimationController _easyController;
+  late final AnimationController _mediumController;
+  late final AnimationController _hardController;
+
+  late final Animation<double> _easyGlow;
+  late final Animation<double> _mediumGlow;
+  late final Animation<double> _hardGlow;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _easyController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat(reverse: true);
+
+    _mediumController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    )..repeat(reverse: true);
+
+    _hardController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    )..repeat(reverse: true);
+
+    _easyGlow = Tween<double>(begin: 2, end: 12).animate(
+      CurvedAnimation(parent: _easyController, curve: Curves.easeInOut),
+    );
+    _mediumGlow = Tween<double>(begin: 2, end: 14).animate(
+      CurvedAnimation(parent: _mediumController, curve: Curves.easeInOut),
+    );
+    _hardGlow = Tween<double>(begin: 2, end: 16).animate(
+      CurvedAnimation(parent: _hardController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _easyController.dispose();
+    _mediumController.dispose();
+    _hardController.dispose();
+    super.dispose();
+  }
+
+  void navigate(BuildContext context, Widget screen) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
+  }
+
+  Widget _buildQuizBox({
+    required String title,
+    required String imagePath,
+    required Color baseColor,
+    required Color glowColor,
+    required Animation<double> animation,
+    required VoidCallback onTap,
+  }) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, _) {
+        return GestureDetector(
+          onTap: onTap,
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              color: baseColor.withOpacity(0.7),
+              boxShadow: [
+                BoxShadow(
+                  color: glowColor.withOpacity(0.6),
+                  blurRadius: animation.value,
+                  spreadRadius: animation.value / 2,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            height: 140,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: glowColor.withOpacity(0.3),
+                      ),
+                    ),
+                  ),
+                ),
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(25),
+                    bottomRight: Radius.circular(25),
+                  ),
+                  child: Image.asset(imagePath, width: 130, fit: BoxFit.cover),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromARGB(255, 5, 1, 16),
-              Color.fromARGB(255, 2, 10, 32),
-            ],
-          ),
-        ),
+      backgroundColor: Colors.deepPurple[50],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                const Text(
+                  "Game Quiz",
+                  style: TextStyle(
+                    fontSize: 34,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  "Choose your level and test your gaming knowledge!",
+                  style: TextStyle(fontSize: 16, color: Colors.black54),
+                ),
+                const SizedBox(height: 30),
 
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  const Text(
-                    "Ready to test your Gaming IQ ?",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 215, 201, 215),
+                // Easy
+                _buildQuizBox(
+                  title: "Easy Level",
+                  imagePath: 'assets/bg1.jpg',
+                  baseColor: Colors.green[100]!,
+                  glowColor: Colors.green,
+                  animation: _easyGlow,
+                  onTap: () => navigate(
+                    context,
+                    QuizScreen(
+                      difficulty: "easy",
+                      levelName: "Easy",
+                      themeColor: Colors.green,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    "Select Your Difficulty Level",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color.fromARGB(255, 175, 151, 199),
+                ),
+
+                // Medium
+                _buildQuizBox(
+                  title: "Medium Level",
+                  imagePath: 'assets/medium.jpg',
+                  baseColor: Colors.amber[100]!,
+                  glowColor: const Color.fromARGB(255, 84, 62, 207),
+                  animation: _mediumGlow,
+                  onTap: () => navigate(
+                    context,
+                    QuizScreen(
+                      difficulty: "medium",
+                      levelName: "Medium",
+                      themeColor: Colors.amber,
                     ),
                   ),
+                ),
 
-                  const SizedBox(height: 30),
-
-                  Column(
-                    children: [
-                      buildRoundedCard(context, "assets/bg1.jpg", "Easy", () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                EasyQuizScreen(difficulty: "LEVEL 1"),
-                          ),
-                        );
-                      }),
-
-                      const SizedBox(height: 20),
-                      buildRoundedCard(
-                        context,
-                        "assets/medium.jpg",
-                        "Medium",
-                        () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const MediumQuizScreen(difficulty: "LEVEL 2"),
-                            ),
-                          );
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      buildRoundedCard(context, "assets/bg3.jpg", "Hard", () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                HardQuizScreen(difficulty: "LEVEL 3"),
-                          ),
-                        );
-                      }),
-                    ],
+                // Hard
+                _buildQuizBox(
+                  title: "Hard Level",
+                  imagePath: 'assets/bg3.jpg',
+                  baseColor: Colors.pink[100]!,
+                  glowColor: const Color.fromARGB(255, 156, 51, 226),
+                  animation: _hardGlow,
+                  onTap: () => navigate(
+                    context,
+                    QuizScreen(
+                      difficulty: "hard",
+                      levelName: "Hard",
+                      themeColor: Colors.pink,
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildRoundedCard(
-    BuildContext context,
-    String imagePath,
-    String level,
-    VoidCallback onTap,
-  ) {
-    Color glowColor;
-    switch (level.toLowerCase()) {
-      case 'easy':
-        glowColor = const Color.fromARGB(255, 103, 187, 103).withOpacity(0.6);
-        break;
-      case 'medium':
-        glowColor = const Color.fromARGB(255, 114, 148, 172).withOpacity(0.6);
-        break;
-      case 'hard':
-        glowColor = const Color.fromARGB(255, 179, 119, 170).withOpacity(0.6);
-        break;
-      default:
-        glowColor = const Color.fromARGB(255, 232, 186, 236).withOpacity(0.6);
-    }
-
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity, // full width
-        height: 200,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: glowColor),
-          image: DecorationImage(
-            image: AssetImage(imagePath),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.2),
-              BlendMode.darken,
-            ),
-          ),
-
-          boxShadow: [
-            BoxShadow(
-              color: glowColor.withOpacity(0.9),
-              blurRadius: 20,
-              spreadRadius: 5,
-              offset: Offset(0, 0),
-            ),
-          ],
         ),
       ),
     );

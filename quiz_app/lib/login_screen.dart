@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'register_screen.dart';
@@ -21,18 +19,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _checkLoginStatus();
-  }
-
-  Future<void> _checkLoginStatus() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      // Already logged in → Go directly to home screen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
-    }
   }
 
   Future<void> _login() async {
@@ -47,34 +33,30 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     setState(() => _loading = true);
-
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: pass,
+        email: _emailC.text.trim(),
+        password: _passC.text.trim(),
       );
 
-      // Login successful → Home screen
+      if (!mounted) return;
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
-    } on FirebaseAuthException catch (e) {
-      log("Login error: $e");
-      String msg = "Login failed ⚠";
-      if (e.code == 'user-not-found') {
-        msg = "User not found ";
-      } else if (e.code == 'wrong-password') {
-        msg = "Wrong password ";
-      }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      }
+    } finally {
+      if (mounted) {
+        // ✅ Safe setState after async operation
+        setState(() => _loading = false);
+      }
     }
-
-    setState(() => _loading = false);
   }
 
   @override

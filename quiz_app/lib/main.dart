@@ -4,9 +4,7 @@ import 'splash_screen.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
 import 'home_screen.dart';
-import 'easy_quiz.dart';
-import 'medium_quiz.dart';
-import 'hard_quiz.dart';
+import 'quiz_screen.dart';
 import 'leaderboard.dart';
 
 Future<void> main() async {
@@ -34,11 +32,11 @@ class MyApp extends StatelessWidget {
 
       // App routes
       routes: {
-        '/splash': (context) => const SplashScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/register': (context) => const RegisterScreen(),
-        '/home': (context) => const HomeScreen(),
-        //'/quiz': (context) => const  EasyQuiz(),
+        // '/splash': (context) => const SplashScreen(),
+        //'/login': (context) => const LoginScreen(),
+        //'/register': (context) => const RegisterScreen(),
+        //'/home': (context) => const HomeScreen(),
+        //'/quiz': (context) => const QuizScreen(difficulty: 'easy'),
         //'/leaderboard': (context) => const LeaderboardScreen(),
       },
     );

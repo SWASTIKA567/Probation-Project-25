@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quiz_app/home_screen.dart';
 import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,13 +14,36 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Delay 3 seconds then go to LoginScreen
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
+    // ✅ Delay until after first frame is rendered
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkLoginStatus();
     });
+  }
+
+  Future<void> _checkLoginStatus() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+
+      // Add a slight delay (optional) for splash effect
+      await Future.delayed(const Duration(seconds: 2));
+
+      if (!mounted) return;
+
+      if (user != null) {
+        // ✅ Navigate safely after build
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      }
+    } catch (e) {
+      debugPrint("Error in SplashScreen: $e");
+    }
   }
 
   @override
