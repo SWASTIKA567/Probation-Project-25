@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       duration: const Duration(seconds: 5),
     )..repeat(reverse: true);
 
-    _easyGlow = Tween<double>(begin: 2, end: 12).animate(
+    _easyGlow = Tween<double>(begin: 2, end: 18).animate(
       CurvedAnimation(parent: _easyController, curve: Curves.easeInOut),
     );
     _mediumGlow = Tween<double>(begin: 2, end: 14).animate(
@@ -77,40 +77,30 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             margin: const EdgeInsets.symmetric(vertical: 12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
-              color: baseColor.withOpacity(0.7),
+              color: baseColor.withOpacity(0.9),
               boxShadow: [
                 BoxShadow(
-                  color: glowColor.withOpacity(0.6),
+                  color: glowColor.withOpacity(0.5),
                   blurRadius: animation.value,
                   spreadRadius: animation.value / 2,
                   offset: const Offset(0, 6),
                 ),
               ],
             ),
-            height: 140,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: glowColor.withOpacity(0.3),
-                      ),
-                    ),
+            height: 180,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(25),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(imagePath, fit: BoxFit.cover),
+                  Container(
+                    color: baseColor.withOpacity(
+                      0.1,
+                    ), // optional overlay for glow feel
                   ),
-                ),
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(25),
-                    bottomRight: Radius.circular(25),
-                  ),
-                  child: Image.asset(imagePath, width: 130, fit: BoxFit.cover),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
@@ -121,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple[50],
+      backgroundColor: const Color.fromARGB(255, 3, 3, 12),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -131,17 +121,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               children: [
                 const SizedBox(height: 10),
                 const Text(
-                  "Game Quiz",
+                  "Ready to test your Gaming IQ?",
                   style: TextStyle(
-                    fontSize: 34,
+                    fontSize: 29,
                     fontWeight: FontWeight.bold,
-                    color: Colors.deepPurple,
+                    color: Color.fromARGB(255, 246, 245, 249),
                   ),
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  "Choose your level and test your gaming knowledge!",
-                  style: TextStyle(fontSize: 16, color: Colors.black54),
+                  "Choose your level",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color.fromARGB(251, 255, 252, 252),
+                  ),
                 ),
                 const SizedBox(height: 30),
 
@@ -157,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     QuizScreen(
                       difficulty: "easy",
                       levelName: "Easy",
-                      themeColor: Colors.green,
+                      themeColor: const Color.fromARGB(255, 61, 230, 213),
                     ),
                   ),
                 ),
@@ -174,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     QuizScreen(
                       difficulty: "medium",
                       levelName: "Medium",
-                      themeColor: Colors.amber,
+                      themeColor: const Color.fromARGB(255, 123, 114, 207),
                     ),
                   ),
                 ),
@@ -191,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     QuizScreen(
                       difficulty: "hard",
                       levelName: "Hard",
-                      themeColor: Colors.pink,
+                      themeColor: const Color.fromARGB(255, 174, 56, 203),
                     ),
                   ),
                 ),

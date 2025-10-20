@@ -32,11 +32,12 @@ class MyApp extends StatelessWidget {
 
       // App routes
       routes: {
-        // '/splash': (context) => const SplashScreen(),
-        //'/login': (context) => const LoginScreen(),
-        //'/register': (context) => const RegisterScreen(),
-        //'/home': (context) => const HomeScreen(),
-        //'/quiz': (context) => const QuizScreen(difficulty: 'easy'),
+        '/splash': (context) => const SplashScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/home': (context) => const HomeScreen(),
+
+        /// '/quiz': (context) => const QuizScreen(difficulty: 'easy'),
         //'/leaderboard': (context) => const LeaderboardScreen(),
       },
     );

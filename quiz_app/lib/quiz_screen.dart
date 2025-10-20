@@ -26,6 +26,8 @@ class _QuizScreenState extends State<QuizScreen> {
   int _score = 0;
   bool _isLoading = true;
   String? _selectedOption;
+  bool _answered = false;
+  List<String> _currentOptions = [];
 
   @override
   void initState() {
@@ -45,18 +47,36 @@ class _QuizScreenState extends State<QuizScreen> {
       setState(() {
         _questions = data['results'];
         _isLoading = false;
+        loadOptions();
       });
     } else {
       throw Exception('Failed to load questions');
     }
   }
 
-  void checkAnswer(String selectedAnswer) {
+  void loadOptions() {
+    _currentOptions = [
+      ..._questions[_currentIndex]['incorrect_answers'].cast<String>(),
+      _questions[_currentIndex]['correct_answer'],
+    ];
+    _currentOptions.shuffle();
+  }
+
+  void selectOption(String option) {
+    if (_answered) return; // cannot change selection after submit
+    setState(() {
+      _selectedOption = option;
+    });
+  }
+
+  void submitAnswer() {
+    if (_selectedOption == null || _answered) return;
+
     final correctAnswer = _questions[_currentIndex]['correct_answer'];
 
+    if (_selectedOption == correctAnswer) _score++;
     setState(() {
-      _selectedOption = selectedAnswer;
-      if (selectedAnswer == correctAnswer) _score++;
+      _answered = true;
     });
 
     Future.delayed(const Duration(seconds: 1), () {
@@ -64,6 +84,8 @@ class _QuizScreenState extends State<QuizScreen> {
         setState(() {
           _currentIndex++;
           _selectedOption = null;
+          _answered = false;
+          loadOptions();
         });
       } else {
         saveScoreToFirestore();
@@ -90,8 +112,8 @@ class _QuizScreenState extends State<QuizScreen> {
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-        backgroundColor: widget.themeColor.withOpacity(0.2),
-        title: Text('${widget.levelName} Quiz Completed 🎉'),
+        backgroundColor: widget.themeColor.withOpacity(0.9),
+        title: Text('${widget.levelName} Quiz Completed !'),
         content: Text('Your score is $_score / 10'),
         actions: [
           TextButton(
@@ -108,7 +130,7 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: widget.themeColor.withOpacity(0.2),
+      backgroundColor: widget.themeColor.withOpacity(0.5),
       appBar: AppBar(
         title: Text("${widget.levelName} Quiz - Video Games"),
         backgroundColor: widget.themeColor,
@@ -125,7 +147,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     "Question ${_currentIndex + 1} of ${_questions.length}",
                     style: TextStyle(
                       fontSize: 18,
-                      color: widget.themeColor.withOpacity(0.8),
+                      color: widget.themeColor.withOpacity(0.9),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -141,7 +163,27 @@ class _QuizScreenState extends State<QuizScreen> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  ..._buildOptions(), // fixed
+                  ..._buildOptions(),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _selectedOption != null && !_answered
+                        ? submitAnswer
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: widget.themeColor,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      "Submit",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -149,45 +191,29 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   List<Widget> _buildOptions() {
-    List<String> options = [
-      ..._questions[_currentIndex]['incorrect_answers'].cast<String>(),
-      _questions[_currentIndex]['correct_answer'],
-    ];
-    options.shuffle();
-
-    return options.map((option) {
-      final isSelected = _selectedOption == option;
-      final isCorrect =
-          isSelected && option == _questions[_currentIndex]['correct_answer'];
-      final isWrong =
-          isSelected && option != _questions[_currentIndex]['correct_answer'];
+    return _currentOptions.map((option) {
+      Color optioncolor = widget.themeColor.withOpacity(0.7);
+      if (_answered) {
+        if (option == _questions[_currentIndex]['correct_answer']) {
+          optioncolor = Colors.green.withOpacity(0.7);
+        } else if (option == _selectedOption &&
+            _selectedOption != _questions[_currentIndex]['correct_answer']) {
+          optioncolor = Colors.red.withOpacity(0.7);
+        }
+      } else if (_selectedOption == option) {
+        optioncolor = widget.themeColor.withOpacity(0.9);
+      }
 
       return GestureDetector(
-        onTap: _selectedOption == null ? () => checkAnswer(option) : null,
+        onTap: () => selectOption(option),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           margin: const EdgeInsets.symmetric(vertical: 8),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: isCorrect
-                ? Colors.green.shade300
-                : isWrong
-                ? Colors.red.shade300
-                : widget.themeColor.withOpacity(0.7),
+            color: optioncolor,
+
             borderRadius: BorderRadius.circular(12),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: isCorrect
-                          ? Colors.greenAccent
-                          : isWrong
-                          ? Colors.redAccent
-                          : widget.themeColor,
-                      blurRadius: 15,
-                      spreadRadius: 3,
-                    ),
-                  ]
-                : [],
           ),
           child: Text(
             option.replaceAll('&quot;', '"').replaceAll('&#039;', "'"),
