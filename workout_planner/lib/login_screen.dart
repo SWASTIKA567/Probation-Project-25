@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
             left: 0,
             right: 0,
             child: Container(
-              height: 450,
+              height: 500,
               decoration: const BoxDecoration(
                 color: Color(0xFF0B163F),
                 borderRadius: BorderRadius.only(
@@ -139,34 +139,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 16),
-                  // Back button row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: const [
-                          Icon(Icons.arrow_back, color: Colors.white),
-                          SizedBox(width: 6),
-                          Text(
-                            "Back",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.8),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(Icons.info_outline, size: 20),
-                      ),
-                    ],
-                  ),
 
                   const SizedBox(height: 10),
                   const Text(
@@ -182,13 +154,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Email field
                   const Text(
-                    "Email or phone number",
+                    "Email",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   TextField(
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
@@ -203,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
 
                   // Password field
                   const Text(
@@ -213,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   TextField(
                     obscureText: true,
                     style: const TextStyle(color: Colors.white),
@@ -256,6 +228,26 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
+                  const SizedBox(height: 20),
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Don't have an account? Sign Up",
+                        style: TextStyle(
+                          color: Colors.white70,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 50),
                 ],
               ),
@@ -267,7 +259,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-// 🎨 Custom Clipper for Blue Curve
+//  Custom Clipper for Blue Curve
 class TopCurveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {

@@ -4,7 +4,6 @@ import 'package:workout_planner/home_screen.dart';
 import 'splash_screen.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
-import 'welcome_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,12 +16,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Todo App',
+      title: 'WORKOUT APP',
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
         '/': (_) => const SplashScreen(),
-        '/welcome': (_) => const WelcomeScreen(),
 
         '/login': (_) => const LoginScreen(),
         '/register': (_) => const RegisterScreen(),
