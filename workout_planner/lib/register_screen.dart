@@ -26,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (name.isEmpty || email.isEmpty || pass.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Enter all the required fields ✍")),
+        const SnackBar(content: Text("Enter all the required fields ")),
       );
       return;
     }
@@ -124,7 +124,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             left: 0,
             right: 0,
             child: Container(
-              height: 450,
+              height: 550,
               decoration: const BoxDecoration(
                 color: Color(0xFF0B163F),
                 borderRadius: BorderRadius.only(
@@ -147,34 +147,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: const [
-                          Icon(Icons.arrow_back, color: Colors.white),
-                          SizedBox(width: 6),
-                          Text(
-                            "Back",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.8),
-                          borderRadius: BorderRadius.circular(8),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Row(
+                          children: const [
+                            Icon(Icons.arrow_back, color: Colors.white),
+                            SizedBox(width: 6),
+                          ],
                         ),
-                        child: const Icon(Icons.info_outline, size: 20),
                       ),
                     ],
                   ),
 
                   const SizedBox(height: 10),
                   const Text(
-                    "Log In",
+                    "Sign Up",
                     style: TextStyle(
                       fontSize: 28,
                       color: Colors.white,
@@ -184,9 +173,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                   const Spacer(),
 
-                  // Email field
+                  // Name field
                   const Text(
-                    "Email or phone number",
+                    "Enter the name",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -208,10 +197,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
 
                   const SizedBox(height: 20),
+                  const Text(
+                    " Create an Email",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    obscureText: true,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: "Type here...",
+                      hintStyle: const TextStyle(color: Colors.white54),
+                      filled: true,
+                      fillColor: const Color(0xFF182550),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
 
                   // Password field
                   const Text(
-                    "Password",
+                    " Create Password",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -235,7 +248,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                   const SizedBox(height: 30),
 
-                  // Log In button
                   Center(
                     child: ElevatedButton(
                       onPressed: () {},
@@ -250,7 +262,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       child: const Text(
-                        "Log In",
+                        "Sign Up",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -271,7 +283,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 }
 
-// 🎨 Custom Clipper for Blue Curve
+// Custom Clipper for Blue Curve
 class TopCurveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
