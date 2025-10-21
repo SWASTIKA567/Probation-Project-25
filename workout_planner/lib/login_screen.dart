@@ -162,6 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 10),
                   TextField(
+                    controller: _emailC,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: "Type here...",
@@ -187,7 +188,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 10),
                   TextField(
-                    obscureText: true,
+                    controller: _passC,
+                    obscureText: obscurePassword,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: "Type here...",
@@ -198,6 +200,19 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide.none,
                       ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.white54,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            obscurePassword = !obscurePassword;
+                          });
+                        },
+                      ),
                     ),
                   ),
 
@@ -206,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Log In button
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: _loading ? null : _login,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF295BFF),
                         shape: RoundedRectangleBorder(
@@ -217,14 +232,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           vertical: 14,
                         ),
                       ),
-                      child: const Text(
-                        "Log In",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: _loading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                              "Log In",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
 

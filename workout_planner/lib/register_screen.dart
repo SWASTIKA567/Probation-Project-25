@@ -18,7 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passC = TextEditingController();
 
   bool _loading = false;
-
+  bool obscurePassword = true;
   Future<void> _register() async {
     final name = _nameC.text.trim();
     final email = _emailC.text.trim();
@@ -183,6 +183,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 8),
                   TextField(
+                    controller: _nameC,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: "Type here...",
@@ -206,7 +207,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 8),
                   TextField(
-                    obscureText: true,
+                    controller: _emailC,
+
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: "Type here...",
@@ -232,7 +234,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 8),
                   TextField(
-                    obscureText: true,
+                    controller: _passC,
+                    obscureText: obscurePassword,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: "Type here...",
@@ -243,6 +246,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide.none,
                       ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.white54,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            obscurePassword = !obscurePassword;
+                          });
+                        },
+                      ),
                     ),
                   ),
 
@@ -250,7 +266,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: _loading ? null : _register,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF295BFF),
                         shape: RoundedRectangleBorder(
@@ -261,14 +277,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           vertical: 14,
                         ),
                       ),
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: _loading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                              "Sign Up",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
 
