@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workout_planner/home_screen.dart';
+import 'package:workout_planner/Gender_screen.dart';
 import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
         // ✅ Navigate safely after build
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (context) => const GenderScreen()),
         );
       } else {
         Navigator.pushReplacement(
@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: SizedBox.expand(
         child: Image.asset(
-          'assets/workoutbg1.jpg', // background image
+          'assets/bg1.jpg', // background image
           fit: BoxFit.cover, // full screen cover
         ),
       ),

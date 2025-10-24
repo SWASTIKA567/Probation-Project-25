@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:workout_planner/home_screen.dart';
+import 'package:workout_planner/Gender_screen.dart';
 import 'splash_screen.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
 
         '/login': (_) => const LoginScreen(),
         '/register': (_) => const RegisterScreen(),
-        '/home': (_) => const HomeScreen(),
+        '/home': (_) => const GenderScreen(),
       },
     );
   }
