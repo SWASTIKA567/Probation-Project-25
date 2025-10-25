@@ -51,7 +51,7 @@ class _GenderScreenState extends State<GenderScreen> {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    "To give you a better experience\n    by knowing your gender",
+                    "To give you a better experience\n   by knowing your gender",
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                     textAlign: TextAlign.center,
                   ),
@@ -66,17 +66,17 @@ class _GenderScreenState extends State<GenderScreen> {
                       color: const Color.fromARGB(255, 21, 21, 21),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 70),
 
                   // --- Gender Buttons ---
                   Column(
                     children: [
                       genderButton("Female", "assets/female.svg"),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 60),
                       genderButton("Male", "assets/male.svg"),
                     ],
                   ),
-
+                  const SizedBox(height: 130),
                   // --- Bottom Buttons ---
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

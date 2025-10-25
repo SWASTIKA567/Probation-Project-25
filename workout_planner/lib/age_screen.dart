@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
+import 'weight_screen.dart';
 
 class AgeScreen extends StatefulWidget {
   const AgeScreen({super.key});
@@ -9,7 +9,9 @@ class AgeScreen extends StatefulWidget {
 }
 
 class _AgeScreenState extends State<AgeScreen> {
-  double? _age;
+  int? selectedAge;
+  final FixedExtentScrollController _scrollController =
+      FixedExtentScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class _AgeScreenState extends State<AgeScreen> {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  "To provide you with a better experience by knowing your age",
+                  "To provide you with a better\n   experience by knowing your age",
                   style: TextStyle(color: Colors.grey, fontSize: 16),
                 ),
                 const SizedBox(height: 60),
@@ -50,102 +52,118 @@ class _AgeScreenState extends State<AgeScreen> {
 
                 const SizedBox(height: 40),
 
-                // Dial display
-                SizedBox(
-                  height: 200,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        height: 180,
-                        width: 180,
-                        child: CustomPaint(painter: _DialPainter()),
-                      ),
-                      Text(
-                        _age == null ? "--" : _age!.toInt().toString(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
+                // Age Selector
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      height: 100,
+                      child: ListWheelScrollView.useDelegate(
+                        controller: _scrollController,
+                        itemExtent: 40,
+                        diameterRatio: 1.6,
+                        physics: const FixedExtentScrollPhysics(),
+                        onSelectedItemChanged: (index) {
+                          setState(() {
+                            selectedAge = index + 12;
+                          });
+                        },
+                        childDelegate: ListWheelChildBuilderDelegate(
+                          builder: (context, index) {
+                            final age = index + 12;
+                            final isSelected = selectedAge == age;
+                            return Center(
+                              child: Text(
+                                '$age',
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? Colors.white
+                                      : Colors.grey,
+                                  fontSize: isSelected ? 22 : 18,
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                                ),
+                              ),
+                            );
+                          },
+                          childCount: 100,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 40),
-
-                // Slider (age dialer)
-                SliderTheme(
-                  data: SliderTheme.of(context).copyWith(
-                    activeTrackColor: Colors.white,
-                    inactiveTrackColor: Colors.grey.shade800,
-                    thumbColor: Colors.white,
-                    overlayColor: Colors.white24,
-                  ),
-                  child: Slider(
-                    value: _age ?? 10,
-                    min: 10,
-                    max: 80,
-                    divisions: 70,
-                    onChanged: (value) {
-                      setState(() {
-                        _age = value;
-                      });
-                    },
-                  ),
+                    ),
+                    // lines between selected age
+                    Positioned(
+                      top: 80,
+                      child: Container(
+                        width: 80,
+                        height: 2,
+                        color: Colors.deepOrange,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 80,
+                      child: Container(
+                        width: 80,
+                        height: 2,
+                        color: Colors.deepOrange,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-
             // Bottom buttons
-            Positioned(
-              left: 20,
-              right: 20,
-              bottom: 30,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Back button
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text(
-                      "Back",
-                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                  TextButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context); // skip/back
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.purpleAccent,
+                    ),
+                    label: const Text(
+                      "Skip",
+                      style: TextStyle(
+                        color: Colors.purpleAccent,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
-
-                  // Continue button
-                  ElevatedButton(
-                    onPressed: _age == null
-                        ? null
-                        : () {
-                            Navigator.pushNamed(
-                              context,
-                              '/height',
-                            ); //  (Height)
-                          },
+                  ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _age == null
+                      backgroundColor: selectedAge == null
                           ? Colors.grey.shade700
-                          : Colors.white,
-                      foregroundColor: _age == null
-                          ? Colors.grey.shade400
-                          : Colors.black,
+                          : Colors.purpleAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
+                        horizontal: 20,
                         vertical: 12,
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
                     ),
-                    child: const Text(
-                      "Continue",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    onPressed: selectedAge == null
+                        ? null
+                        : () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const WeightScreen(),
+                              ),
+                            );
+                          },
+                    icon: const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                    ),
+                    label: const Text(
+                      "Next",
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],
@@ -156,23 +174,4 @@ class _AgeScreenState extends State<AgeScreen> {
       ),
     );
   }
-}
-
-// Custom painter for dial background
-class _DialPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.white.withOpacity(0.2)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 6;
-    final rect = Rect.fromCircle(
-      center: Offset(size.width / 2, size.height / 2),
-      radius: 80,
-    );
-    canvas.drawArc(rect, math.pi, math.pi, false, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
