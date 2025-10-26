@@ -150,7 +150,7 @@ class _AgeScreenState extends State<AgeScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const AgeScreen(),
+                                  builder: (context) => const WeightScreen(),
                                 ),
                               );
                             }

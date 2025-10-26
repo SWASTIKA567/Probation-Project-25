@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'height_screen.dart';
+import 'targetweight_screen.dart';
 
-class WeightScreen extends StatefulWidget {
-  const WeightScreen({super.key});
+class HeightScreen extends StatefulWidget {
+  const HeightScreen({super.key});
 
   @override
-  State<WeightScreen> createState() => _WeightScreenState();
+  State<HeightScreen> createState() => _HeightScreenState();
 }
 
-class _WeightScreenState extends State<WeightScreen> {
-  int? selectedWeight;
+class _HeightScreenState extends State<HeightScreen> {
+  int? selectedHeight;
   final FixedExtentScrollController _scrollController =
       FixedExtentScrollController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +24,7 @@ class _WeightScreenState extends State<WeightScreen> {
               children: [
                 const SizedBox(height: 40),
                 const Text(
-                  "What Is Your Weight?",
+                  "What Is Your Height?",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -65,16 +64,16 @@ class _WeightScreenState extends State<WeightScreen> {
                         physics: const FixedExtentScrollPhysics(),
                         onSelectedItemChanged: (index) {
                           setState(() {
-                            selectedWeight = index + 30;
+                            selectedHeight = index + 140;
                           });
                         },
                         childDelegate: ListWheelChildBuilderDelegate(
                           builder: (context, index) {
-                            final weight = index + 30;
-                            final isSelected = selectedWeight == weight;
+                            final height = index + 140;
+                            final isSelected = selectedHeight == height;
                             return Center(
                               child: Text(
-                                '$weight kg',
+                                '$height cm',
                                 style: TextStyle(
                                   color: isSelected
                                       ? Colors.white
@@ -95,7 +94,7 @@ class _WeightScreenState extends State<WeightScreen> {
                     Positioned(
                       top: 140,
                       child: Container(
-                        width: 100,
+                        width: 120,
                         height: 3,
                         color: Colors.deepOrange,
                       ),
@@ -103,7 +102,7 @@ class _WeightScreenState extends State<WeightScreen> {
                     Positioned(
                       bottom: 140,
                       child: Container(
-                        width: 100,
+                        width: 120,
                         height: 3,
                         color: Colors.deepOrange,
                       ),
@@ -145,12 +144,13 @@ class _WeightScreenState extends State<WeightScreen> {
                     ),
 
                     ElevatedButton.icon(
-                      onPressed: selectedWeight != null
+                      onPressed: selectedHeight != null
                           ? () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const HeightScreen(),
+                                  builder: (context) =>
+                                      const TargetWeightScreen(),
                                 ),
                               );
                             }

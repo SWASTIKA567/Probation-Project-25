@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'height_screen.dart';
+import 'goal_screen.dart';
 
-class WeightScreen extends StatefulWidget {
-  const WeightScreen({super.key});
-
+class TargetWeightScreen extends StatefulWidget {
+  const TargetWeightScreen({super.key});
   @override
-  State<WeightScreen> createState() => _WeightScreenState();
+  State<TargetWeightScreen> createState() => _TargetWeightScreenState();
 }
 
-class _WeightScreenState extends State<WeightScreen> {
-  int? selectedWeight;
+class _TargetWeightScreenState extends State<TargetWeightScreen> {
+  int? selectedTargetWeight;
   final FixedExtentScrollController _scrollController =
       FixedExtentScrollController();
 
@@ -25,7 +24,7 @@ class _WeightScreenState extends State<WeightScreen> {
               children: [
                 const SizedBox(height: 40),
                 const Text(
-                  "What Is Your Weight?",
+                  "What Is Your Target Weight?",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -52,7 +51,7 @@ class _WeightScreenState extends State<WeightScreen> {
 
                 const SizedBox(height: 60),
 
-                // Age Selector
+                // Target Weight Selector
                 Stack(
                   alignment: Alignment.center,
                   children: [
@@ -61,37 +60,36 @@ class _WeightScreenState extends State<WeightScreen> {
                       child: ListWheelScrollView.useDelegate(
                         controller: _scrollController,
                         itemExtent: 60,
-                        diameterRatio: 2,
                         physics: const FixedExtentScrollPhysics(),
                         onSelectedItemChanged: (index) {
                           setState(() {
-                            selectedWeight = index + 30;
+                            selectedTargetWeight = index + 30;
                           });
                         },
                         childDelegate: ListWheelChildBuilderDelegate(
                           builder: (context, index) {
-                            final weight = index + 30;
-                            final isSelected = selectedWeight == weight;
+                            final targetWeight = index + 30;
+                            final isSelected =
+                                selectedTargetWeight == targetWeight;
                             return Center(
                               child: Text(
-                                '$weight kg',
+                                '$targetWeight kg',
                                 style: TextStyle(
                                   color: isSelected
                                       ? Colors.white
                                       : Colors.grey,
-                                  fontSize: isSelected ? 38 : 36,
+                                  fontSize: isSelected ? 32 : 24,
                                   fontWeight: isSelected
                                       ? FontWeight.bold
-                                      : FontWeight.normal,
+                                      : null,
                                 ),
                               ),
                             );
                           },
-                          childCount: 100,
+                          childCount: 271, // Target weight from 30kg to 300kg
                         ),
                       ),
                     ),
-                    // lines between selected age
                     Positioned(
                       top: 140,
                       child: Container(
@@ -145,12 +143,12 @@ class _WeightScreenState extends State<WeightScreen> {
                     ),
 
                     ElevatedButton.icon(
-                      onPressed: selectedWeight != null
+                      onPressed: selectedTargetWeight != null
                           ? () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const HeightScreen(),
+                                  builder: (context) => const GoalScreen(),
                                 ),
                               );
                             }
