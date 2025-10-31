@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'age_screen.dart';
-//import 'login_screen.dart';
 
 class GenderScreen extends StatefulWidget {
   const GenderScreen({super.key});
@@ -15,18 +13,18 @@ class GenderScreen extends StatefulWidget {
 class _GenderScreenState extends State<GenderScreen> {
   String? selectedGender;
 
-  // Future<void> _logout(BuildContext context) async {
-  //  await FirebaseAuth.instance.signOut();
+  //Future<void> _logout(BuildContext context) async {
+  /// await FirebaseAuth.instance.signOut();
 
-  // if (context.mounted) {
-  // 👇 This clears the navigation stack and takes you to LoginScreen
+  //if (context.mounted) {
+  //  This clears the navigation stack and takes you to LoginScreen
   //  Navigator.pushAndRemoveUntil(
-  //  context,
+  // context,
   // MaterialPageRoute(builder: (_) => const LoginScreen()),
-  //  (route) => false,
-  //  );
+  // (route) => false,
+  // );
   // }
-  // }
+  //}
 
   @override
   Widget build(BuildContext context) {
@@ -178,17 +176,3 @@ class _GenderScreenState extends State<GenderScreen> {
     );
   }
 }
-    
-    
-
-
-       
-        //actions: [
-         // IconButton(
-         //   icon: const Icon(Icons.logout),
-         //   onPressed: () => _logout(context),
-        //  ),
-      //  ],
-     // ),
-      
-

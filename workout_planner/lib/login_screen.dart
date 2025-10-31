@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'register_screen.dart';
-import 'Gender_screen.dart';
+import 'views/Gender_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } finally {
       if (mounted) {
-        // ✅ Safe setState after async operation
+        //  Safe setState after async operation
         setState(() => _loading = false);
       }
     }

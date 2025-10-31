@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Level_screen.dart';
 
 class GoalScreen extends StatefulWidget {
   const GoalScreen({super.key});
@@ -10,7 +11,7 @@ class GoalScreen extends StatefulWidget {
 class _GoalScreenState extends State<GoalScreen> {
   String? selectedGoal;
   final List<String> goals = [
-    'Lose Weight',
+    'Weight Loss',
     'Build Muscle',
     'Improve Endurance',
     'Increase Flexibility',
@@ -28,7 +29,7 @@ class _GoalScreenState extends State<GoalScreen> {
                 const SizedBox(height: 40),
                 const Center(
                   child: Text(
-                    " What is your fitness goal?",
+                    " What's your goal?",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -48,20 +49,6 @@ class _GoalScreenState extends State<GoalScreen> {
                 ),
 
                 const SizedBox(height: 60),
-
-                // Profile Icon
-                Center(
-                  child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.white,
-
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.black,
-                      size: 60,
-                    ),
-                  ),
-                ),
               ],
             ),
             const SizedBox(height: 90),
@@ -148,11 +135,11 @@ class _GoalScreenState extends State<GoalScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const GoalScreen(),
+                                  builder: (context) => const LevelScreen(),
                                 ),
                               );
                             }
-                          : null, // disabled if gender not selected
+                          : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF9C7B44),
                         disabledBackgroundColor: Colors.grey.shade700,

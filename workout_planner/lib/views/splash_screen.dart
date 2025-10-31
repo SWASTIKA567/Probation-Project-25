@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workout_planner/Gender_screen.dart';
-import 'login_screen.dart';
+import 'package:workout_planner/views/Gender_screen.dart';
+import '../login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

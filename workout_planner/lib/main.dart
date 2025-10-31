@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:workout_planner/Gender_screen.dart';
-import 'splash_screen.dart';
+import 'package:workout_planner/views/Gender_screen.dart';
+import 'views/splash_screen.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
 
