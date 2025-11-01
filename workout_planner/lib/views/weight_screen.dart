@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'height_screen.dart';
 
 class WeightScreen extends StatefulWidget {
-  const WeightScreen({super.key});
+  final String gender;
+  final int age;
+  const WeightScreen({super.key, required this.gender, required this.age});
 
   @override
   State<WeightScreen> createState() => _WeightScreenState();
@@ -15,6 +17,7 @@ class _WeightScreenState extends State<WeightScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('Gender: ${widget.gender}, Age : ${widget.age}');
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -139,7 +142,7 @@ class _WeightScreenState extends State<WeightScreen> {
                       ),
                       icon: const Icon(Icons.arrow_back_ios, size: 16),
                       label: const Text(
-                        "Skip",
+                        "Back",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -150,7 +153,11 @@ class _WeightScreenState extends State<WeightScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const HeightScreen(),
+                                  builder: (context) => HeightScreen(
+                                    gender: widget.gender,
+                                    age: widget.age,
+                                    weight: selectedWeight!,
+                                  ),
                                 ),
                               );
                             }

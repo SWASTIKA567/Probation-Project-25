@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 import 'targetweight_screen.dart';
 
 class HeightScreen extends StatefulWidget {
-  const HeightScreen({super.key});
+  final String gender;
+  final int age;
+  final int weight;
+  const HeightScreen({
+    super.key,
+    required this.gender,
+    required this.age,
+    required this.weight,
+  });
 
   @override
   State<HeightScreen> createState() => _HeightScreenState();
@@ -138,7 +146,7 @@ class _HeightScreenState extends State<HeightScreen> {
                       ),
                       icon: const Icon(Icons.arrow_back_ios, size: 16),
                       label: const Text(
-                        "Skip",
+                        "Back",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -149,8 +157,13 @@ class _HeightScreenState extends State<HeightScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      const TargetWeightScreen(),
+                                  builder: (context) => TargetWeightScreen(
+                                    gender: widget.gender,
+                                    age: widget.age,
+                                    weight: widget.weight,
+
+                                    height: selectedHeight!,
+                                  ),
                                 ),
                               );
                             }

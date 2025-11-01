@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,8 +12,58 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   String? _selectedDay;
+  String? workoutType;
+  bool isLoading = true;
 
   final TextEditingController _dayController = TextEditingController();
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchWorkoutData();
+  }
+
+  Future<void> fetchWorkoutData() async {
+    try {
+      final user = _auth.currentUser;
+
+      if (user == null) {
+        showSnackBar("No user logged in. Please log in again.");
+        setState(() => isLoading = false);
+        return;
+      }
+
+      final doc = await _firestore.collection('users').doc(user.uid).get();
+
+      if (doc.exists && doc.data() != null) {
+        setState(() {
+          workoutType = doc['workout_type'];
+          isLoading = false;
+        });
+
+        showSnackBar("Workout data fetched successfully ");
+      } else {
+        setState(() => isLoading = false);
+        showSnackBar("No workout data found. Please complete setup.");
+      }
+    } catch (e) {
+      setState(() => isLoading = false);
+      showSnackBar("Error fetching data: $e");
+    }
+  }
+
+  void showSnackBar(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.blueAccent,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -70,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: 7,
                       itemBuilder: (context, index) {
-                        final day = "Day ${index + 1}";
+                        final day = "${index + 1}";
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6.0),
                           child: GestureDetector(
@@ -166,23 +218,36 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.blueAccent,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(height: 10),
+                    child: Center(
+                      child: isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Your Workout Type",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(254, 255, 255, 255),
+                                    fontSize: 24,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
 
-                        Text(
-                          "Select your day",
-                          style: TextStyle(
-                            color: Color.fromARGB(254, 255, 255, 255),
-                            fontSize: 24,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ],
+                                const SizedBox(height: 10),
+                                Text(
+                                  workoutType ?? " Not available yet",
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
                     ),
                   ),
                 ),

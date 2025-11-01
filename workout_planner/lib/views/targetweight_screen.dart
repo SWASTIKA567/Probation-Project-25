@@ -2,7 +2,18 @@ import 'package:flutter/material.dart';
 import 'goal_screen.dart';
 
 class TargetWeightScreen extends StatefulWidget {
-  const TargetWeightScreen({super.key});
+  final String gender;
+  final int age;
+  final int weight;
+  final int height;
+
+  const TargetWeightScreen({
+    super.key,
+    required this.gender,
+    required this.age,
+    required this.weight,
+    required this.height,
+  });
   @override
   State<TargetWeightScreen> createState() => _TargetWeightScreenState();
 }
@@ -14,6 +25,9 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+      "Gender : ${widget.gender}, Age: ${widget.age} ,Weight : ${widget.weight}, Height : ${widget.height}",
+    );
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -137,7 +151,7 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
                       ),
                       icon: const Icon(Icons.arrow_back_ios, size: 16),
                       label: const Text(
-                        "Skip",
+                        "Back",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -148,7 +162,13 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const GoalScreen(),
+                                  builder: (context) => GoalScreen(
+                                    gender: widget.gender,
+                                    age: widget.age,
+                                    weight: widget.weight,
+                                    height: widget.height,
+                                    targetweight: selectedTargetWeight!,
+                                  ),
                                 ),
                               );
                             }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'age_screen.dart';
 
 class GenderScreen extends StatefulWidget {
@@ -29,7 +28,7 @@ class _GenderScreenState extends State<GenderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1E1E),
+      backgroundColor: const Color(0xFFDBE4FF),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
@@ -43,14 +42,14 @@ class _GenderScreenState extends State<GenderScreen> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Color(0xFF1E1E1E),
                     ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 20),
                   Text(
                     "To give you a better experience\n   by knowing your gender",
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                    style: TextStyle(fontSize: 16, color: Color(0xFF1E1E1E)),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 40),
@@ -85,7 +84,7 @@ class _GenderScreenState extends State<GenderScreen> {
                           Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF9C7B44),
+                          backgroundColor: const Color(0xFF004DFF),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -96,7 +95,7 @@ class _GenderScreenState extends State<GenderScreen> {
                         ),
                         icon: const Icon(Icons.arrow_back_ios, size: 16),
                         label: const Text(
-                          "Skip",
+                          "Back",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
@@ -108,14 +107,15 @@ class _GenderScreenState extends State<GenderScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const AgeScreen(),
+                                    builder: (context) =>
+                                        AgeScreen(gender: selectedGender!),
                                   ),
                                 );
                               }
                             : null, // disabled if gender not selected
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF9C7B44),
-                          disabledBackgroundColor: Colors.grey.shade700,
+                          backgroundColor: const Color(0xFF004DFF),
+                          disabledBackgroundColor: Color(0XFFB1C8FF),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -154,7 +154,7 @@ class _GenderScreenState extends State<GenderScreen> {
         height: 120,
         width: 120,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.orange : Colors.white,
+          color: isSelected ? Color(0xFF004DFF) : Colors.white,
           shape: BoxShape.circle,
         ),
         child: Column(

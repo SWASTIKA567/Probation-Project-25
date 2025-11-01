@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'weight_screen.dart';
 
 class AgeScreen extends StatefulWidget {
-  const AgeScreen({super.key});
+  final String gender;
+  const AgeScreen({super.key, required this.gender});
 
   @override
   State<AgeScreen> createState() => _AgeScreenState();
@@ -150,7 +151,10 @@ class _AgeScreenState extends State<AgeScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const WeightScreen(),
+                                  builder: (context) => WeightScreen(
+                                    age: selectedAge!,
+                                    gender: widget.gender,
+                                  ),
                                 ),
                               );
                             }

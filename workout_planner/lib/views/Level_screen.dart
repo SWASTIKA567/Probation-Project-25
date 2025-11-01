@@ -1,20 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:workout_planner/views/home_screen.dart';
+import '../../controllers/input_controller.dart';
+import '../../models/user_input_model.dart';
+import 'home_screen.dart';
 
 class LevelScreen extends StatefulWidget {
-  const LevelScreen({super.key});
+  final String gender;
+  final int age;
+  final int weight;
+  final int height;
+  final int targetweight;
+  final String goal;
+
+  const LevelScreen({
+    super.key,
+    required this.gender,
+    required this.age,
+    required this.weight,
+    required this.height,
+    required this.targetweight,
+    required this.goal,
+  });
 
   @override
   State<LevelScreen> createState() => _LevelScreenState();
 }
 
 class _LevelScreenState extends State<LevelScreen> {
-  String? selectedGoal;
-  final List<String> goals = [
-    'Weight Loss',
-    'Build Muscle',
-    'Improve Endurance',
-  ];
+  String? selectedLevel;
+  bool isLoading = false;
+
+  final List<String> levels = ['Beginner', 'Intermediate', 'Advanced'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,11 +40,11 @@ class _LevelScreenState extends State<LevelScreen> {
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(height: 40),
-                const Center(
+              children: const [
+                SizedBox(height: 40),
+                Center(
                   child: Text(
-                    " What is your Fitness Level?",
+                    "What is your Fitness Level?",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -37,34 +53,30 @@ class _LevelScreenState extends State<LevelScreen> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-
-                const SizedBox(height: 8),
-                const Center(
+                SizedBox(height: 8),
+                Center(
                   child: Text(
-                    " This helps us Create your personalised plan",
+                    "This helps us create your personalised plan",
                     style: TextStyle(color: Colors.grey, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 ),
-
-                const SizedBox(height: 50),
+                SizedBox(height: 50),
               ],
             ),
 
-            SizedBox(height: 150),
-
-            // Goal Options
+            // levels section
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: List.generate(goals.length, (index) {
-                  final goal = goals[index];
-                  final isSelected = selectedGoal == goal;
+                children: List.generate(levels.length, (index) {
+                  final level = levels[index];
+                  final isSelected = selectedLevel == level;
+
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedGoal = goal;
+                        selectedLevel = level;
                       });
                     },
                     child: Container(
@@ -78,13 +90,15 @@ class _LevelScreenState extends State<LevelScreen> {
                         color: isSelected ? Colors.blue : Colors.grey[800],
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: isSelected ? Color(0xFF9C7B44) : Colors.grey,
+                          color: isSelected
+                              ? const Color(0xFF9C7B44)
+                              : Colors.grey,
                           width: 2,
                         ),
                       ),
                       child: Center(
                         child: Text(
-                          goal,
+                          level,
                           style: TextStyle(
                             color: isSelected ? Colors.white : Colors.grey[400],
                             fontSize: 18,
@@ -98,6 +112,7 @@ class _LevelScreenState extends State<LevelScreen> {
               ),
             ),
 
+            // bottom buttons
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
@@ -109,9 +124,7 @@ class _LevelScreenState extends State<LevelScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                      onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF9C7B44),
                         shape: RoundedRectangleBorder(
@@ -124,18 +137,37 @@ class _LevelScreenState extends State<LevelScreen> {
                       ),
                       icon: const Icon(Icons.arrow_back_ios, size: 16),
                       label: const Text(
-                        "Skip",
+                        "Back",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-
                     ElevatedButton.icon(
-                      onPressed: selectedGoal != null
-                          ? () {
-                              Navigator.push(
+                      onPressed: selectedLevel != null
+                          ? () async {
+                              setState(() => isLoading = true);
+
+                              // Create input model
+                              final input = UserInputModel(
+                                heightCm: widget.height,
+                                targetWeight: widget.targetweight,
+                                goal: widget.goal,
+                                gender: widget.gender,
+                                age: widget.age,
+                                weightKg: widget.weight,
+                                fitnessLevel: selectedLevel!,
+                              );
+
+                              //  Call API
+                              final controller = InputController();
+
+                              await controller.submitInputs(input);
+
+                              setState(() => isLoading = false);
+
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const HomeScreen(),
+                                  builder: (context) => HomeScreen(),
                                 ),
                               );
                             }
@@ -152,10 +184,12 @@ class _LevelScreenState extends State<LevelScreen> {
                         ),
                       ),
                       icon: const Icon(Icons.arrow_forward_ios, size: 16),
-                      label: const Text(
-                        "Next",
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      label: isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                              "Next",
+                              style: TextStyle(color: Colors.white),
+                            ),
                     ),
                   ],
                 ),
