@@ -55,7 +55,7 @@ lib/
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/quiz-app.git
+git clone https://github.com/SWASTIKA567/quiz-app.git
 
 # Navigate into the project
 cd quiz-app
