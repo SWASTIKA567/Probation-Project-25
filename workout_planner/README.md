@@ -55,7 +55,7 @@ lib/
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/workout-app.git
+git clone https://github.com/SWASTIKA567/workout-app.git
 
 # Navigate into the project
 cd workout-app
